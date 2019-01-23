@@ -86,7 +86,7 @@ def spam():
     # print(wordProbList)
     # 对每封邮件得到的10个词计算贝叶斯概率
     p = spam.calBayes(wordProbList, spamDict, normDict)
-    if (p > 0.9):
+    if (p > 0.8):
         testResult.setdefault(article_title, 1)
     else:
         testResult.setdefault(article_title, 0)

@@ -47,25 +47,25 @@ class spamEmailBayes:
                 #该文件中包含词个数
                 pw_s=spamDict[word]/spamFilelen
                 pw_n=normDict[word]/normFilelen
-                #wsc:如果小于0.05，则置为0.05
-                if pw_n<0.05:
-                    pw_n=0.05
+                #wsc:如果小于0.01，则置为0.01
+                if pw_n<0.01:
+                    pw_n=0.01
                 ps_w=pw_s/(pw_s+pw_n) 
                 wordProbList.setdefault(word,ps_w)
             if word in spamDict.keys() and word not in normDict.keys():
                 pw_s=spamDict[word]/spamFilelen
-                pw_n=0.05
+                pw_n=0.01
                 ps_w=pw_s/(pw_s+pw_n) 
                 wordProbList.setdefault(word,ps_w)
             if word not in spamDict.keys() and word in normDict.keys():
-                pw_s=0.05
+                pw_s=0.01
                 pw_n=normDict[word]/normFilelen
                 ps_w=pw_s/(pw_s+pw_n) 
                 wordProbList.setdefault(word,ps_w)
             if word not in spamDict.keys() and word not in normDict.keys():
                 #若该词不在脏词词典中，概率设为0.4
                 wordProbList.setdefault(word,0.4)
-        wordProbList=sorted(wordProbList.items(),key=lambda item:item[1],reverse=True)[0:20]
+        wordProbList=sorted(wordProbList.items(),key=lambda item:item[1],reverse=True)[0:100]
         return (wordProbList)
     
     #计算贝叶斯概率
