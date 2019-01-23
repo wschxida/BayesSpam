@@ -16,6 +16,14 @@ class spamEmailBayes:
         for line in open("../data/中文停用词表.txt", 'r', encoding='UTF-8'):
             stopList.append(line[:len(line)-1])
         return stopList;
+
+    # 获得黑名单
+    def getBlackWords(self):
+        BlackList = []
+        for line in open("../data/black_word.txt", 'r', encoding='UTF-8'):
+            BlackList.append(line[:len(line) - 1])
+        return BlackList;
+
     #获得词典
     def get_word_list(self,content,wordsList,stopList):
         #分词结果放入res_list
@@ -40,9 +48,12 @@ class spamEmailBayes:
         return filenames
     
     #通过计算每个文件中p(s|w)来得到对分类影响最大的10个词
-    def getTestWords(self,testDict,spamDict,normDict,normFilelen,spamFilelen):
+    def getTestWords(self,testDict,spamDict,normDict,BlackList,normFilelen,spamFilelen):
         wordProbList={}
         for word,num  in testDict.items():
+            if word in BlackList:
+                #若该词在黑名单，概率设为0.95
+                wordProbList.setdefault(word,0.95)
             if word in spamDict.keys() and word in normDict.keys():
                 #该文件中包含词个数
                 pw_s=spamDict[word]/spamFilelen
@@ -74,7 +85,7 @@ class spamEmailBayes:
         ps_n=1
          
         for word,prob in wordList :
-            print(word+"/"+str(prob))
+            # print(word+"/"+str(prob))
             ps_w*=(prob)
             ps_n*=(1-prob)
         p=ps_w/(ps_w+ps_n)

@@ -23,6 +23,7 @@ spamFilelen_result_file = r'E:\python_project\BayesSpam\data\spamFilelen_result_
 # 获得停用词表，用于对停用词过滤
 spam = spamEmailBayes()
 stopList = spam.getStopWords()
+BlackList = spam.getBlackWords()
 # 获得正常邮件中的词频及样本个数
 fl_normDict = open(normDict_result_file, 'r', encoding='UTF-8')
 normDict = fl_normDict.read()
@@ -81,12 +82,13 @@ def spam():
     spam.get_word_list(article_title_abstract, wordsList, stopList)
     spam.addToDict(wordsList, wordsDict)
     testDict = wordsDict.copy()
+    #print(BlackList)
     # 通过计算每个文件中p(s|w)来得到对分类影响最大的10个词
-    wordProbList = spam.getTestWords(testDict, spamDict, normDict, normFilelen, spamFilelen)
+    wordProbList = spam.getTestWords(testDict, spamDict, normDict, BlackList, normFilelen, spamFilelen)
     # print(wordProbList)
     # 对每封邮件得到的10个词计算贝叶斯概率
     p = spam.calBayes(wordProbList, spamDict, normDict)
-    if (p > 0.8):
+    if (p > 0.9):
         testResult.setdefault(article_title, 1)
     else:
         testResult.setdefault(article_title, 0)
