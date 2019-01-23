@@ -84,9 +84,9 @@ def spam():
     # 通过计算每个文件中p(s|w)来得到对分类影响最大的10个词
     wordProbList = spam.getTestWords(testDict, spamDict, normDict, normFilelen, spamFilelen)
     # print(wordProbList)
-    # 对每封邮件得到的5个词计算贝叶斯概率
+    # 对每封邮件得到的10个词计算贝叶斯概率
     p = spam.calBayes(wordProbList, spamDict, normDict)
-    if (p > 0.8):
+    if (p > 0.9):
         testResult.setdefault(article_title, 1)
     else:
         testResult.setdefault(article_title, 0)

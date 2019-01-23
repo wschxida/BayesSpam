@@ -25,7 +25,18 @@ cur = conn.cursor()
 
 # 1.查询操作
 # 编写sql 查询语句
-sql = "select Article_Title,Article_Abstract from article_detail_selected where extracted_time>DATE_SUB(CURRENT_DATE(),INTERVAL 1 day) limit 1000"
+sql = """
+select ad.Article_Title,ac.Article_Abstract,ac.Article_Content
+from article_detail ad,article_content ac
+where ad.Record_MD5_ID=ac.Article_Record_MD5_ID
+and ad.extracted_time>DATE_SUB(CURRENT_DATE(),INTERVAL 2 day)
+and ad.Website_No='S0051'
+and ac.article_content is not null
+and ac.article_content !=''
+and ac.article_content not like'%<%'
+limit 200
+"""
+
 path = "E:\\python_project\\BayesSpam\\data\\normal\\"
 
 try:
@@ -39,6 +50,7 @@ try:
         # website_no = row['website_no']
         article_title = row['Article_Title']
         Article_Abstract = row['Article_Abstract']
+        Article_Content = row['Article_Content']
         i +=1
         file_name = path + str(i) + '.txt'
         fn = open(file_name, 'w', encoding='UTF-8')  # 打开文件
@@ -47,6 +59,10 @@ try:
             fn.write('\n')
         if Article_Abstract:
             fn.write(Article_Abstract)
+            fn.write('\n')
+        if Article_Content:
+            fn.write(Article_Content)
+            fn.write('\n')
         fn.close()  # 关闭文件
 
 except Exception as e:
