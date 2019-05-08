@@ -1,0 +1,2 @@
+通达信最新指标公式 BOLL做主图公式
+综投网(www zt5 com)1月22日讯N:=20;MIDA:=MA(C,N);VART1:=POW((C-MIDA),2);VART2:=MA(VART1,N);VART3:=SQRT(VART2);UPPERA:=MIDA+2*VART3;
